@@ -5,7 +5,7 @@ from datetime import datetime
 DATA = {
     'dbname': 'learningdb',
     'user': 'postgres',
-    'password': '13524',
+    'password': '',
     'host': 'localhost',
     'port': '5432'
     }
@@ -23,7 +23,7 @@ def create_db():  # создает таблицы
                     """)
             curs.execute("""CREATE TABLE course (
                     id serial PRIMARY KEY NOT NULL,
-                    name varchar(100)) NOT NULL;
+                    name varchar(100) NOT NULL);
                     """)
             curs.execute("""CREATE TABLE student_course (
                     id serial PRIMARY KEY,
