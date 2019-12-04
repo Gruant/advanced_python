@@ -5,6 +5,7 @@ from app.database import Database
 from pprint import pprint
 import vk_api
 import psycopg2 as pg
+from sys import exit
 
 
 def main():
@@ -15,9 +16,8 @@ def main():
             user.create_session()
             user.get_main_user_data()
         except vk_api.exceptions.ApiError:
-            print('Не удалось авторизоваться по причине: ')
+            print('Неверный ')
             raise vk_api.exceptions.ApiError
-
         try:
             db = Database()
             if not db.check_tables():

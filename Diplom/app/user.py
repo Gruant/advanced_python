@@ -26,8 +26,11 @@ class User:
             data = self.vk_api.users.get(user_ids=self.id, fields='interests, music, books, sex, bdate, has_photo,'
                                                                   'city, groups')
             self.id = data[0].get('id')
-        except vk_api.exceptions.ApiError:
-            print('Не удалось получить информацию о пользователе')
+        except vk_api.exceptions.ApiError as e:
+            print('Неверный токен')
+            exit()
+        except IndexError:
+            print('Неверно введен ID')
             exit()
         try:
             day, month, year = data[0].get('bdate').split('.')
@@ -41,7 +44,7 @@ class User:
 
         self.sex = data[0]['sex']
         if self.sex == 0:
-            self.sex = input('Введите ваш пол для корректного поиска: ')
+            self.sex = input('Введите ваш пол для корректного поиска(1-м, 2-ж): ')
 
         try:
             self.city = data[0].get('city')['id']
@@ -81,7 +84,7 @@ class User:
         cities = self.vk_api.database.getCities(**params)
         try:
             self.city = cities['items'][0]['id']
-        except Exception as e:
+        except IndexError:
             print('Город не найден')
             exit()
 
@@ -96,6 +99,7 @@ class User:
         }
         print('?'.join((url, urlencode(params))))
         self.token = input('Введите токен из ссылки редиректа: ')
+        write_token('config.json', self.token)
 
     def create_session(self):
         try:
@@ -109,7 +113,7 @@ class User:
                 self.get_user_access()
                 session = vk_api.VkApi(token=self.token)
                 self.vk_api = session.get_api()
-        except Exception as e:
+        except vk_api.exceptions.ApiError:
             self.get_user_access()
             session = vk_api.VkApi(token=self.token)
             check = session.get_api()
@@ -172,6 +176,13 @@ def interests_search(interest):
     interest = re.sub(r'[?|$.!,:;]', r'', interest)
     match = re.findall(r'\w+', interest)
     return [item.lower() for item in match]
+
+
+def write_token(path, token):
+    config = take_config(path)
+    config.update({'access_token': token})
+    with open (path, 'w') as con:
+        json.dump(config, con)
 
 
 def calculate_age(born):
