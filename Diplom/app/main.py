@@ -32,15 +32,14 @@ def main():
                 if str(user.id) not in users_ids_in_table:
                     db.create_user(user.id)
         except pg.Error as e:
-            print('Не удалось подключиться к базе данных')
-            raise e
+            print('Не удалось подключиться к базе данных', e)
+
         print('==== Получили достаточную информацию о пользователе')
 
         user.take_groups()
         print('==== Получили группы пользователя')
 
         couple_list = user.search_all()
-        pprint(couple_list)
         writen_users = db.get_couple()
         writen_users_in_table = []
         new_couple_list = []
@@ -78,11 +77,10 @@ def main():
             print('Информация добавлена в базу данных')
         except pg.Error as e:
             print('Не удалось записать информацию')
-            raise e
 
     except KeyboardInterrupt:
         print('Выполнение программы прервано')
-        raise KeyboardInterrupt
+
 
 
 

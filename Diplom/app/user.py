@@ -22,9 +22,13 @@ class User:
         self.books = []
 
     def get_main_user_data(self):
-        data = self.vk_api.users.get(user_ids=self.id, fields='interests, music, books, sex, bdate, has_photo,'
-                                                              'city, groups')
-        self.id = data[0].get('id')
+        try:
+            data = self.vk_api.users.get(user_ids=self.id, fields='interests, music, books, sex, bdate, has_photo,'
+                                                                  'city, groups')
+            self.id = data[0].get('id')
+        except vk_api.exceptions.ApiError:
+            print('Не удалось получить информацию о пользователе')
+            exit()
         try:
             day, month, year = data[0].get('bdate').split('.')
             self.age = calculate_age(datetime(year=int(year), month=int(month), day=int(day)))
@@ -175,13 +179,5 @@ def calculate_age(born):
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 
-
 if __name__ == '__main__':
     pass
-
-
-
-
-
-
-

@@ -1,11 +1,13 @@
 import psycopg2 as pg
 from app.user import take_config
 
+PATH = '/Users/antongrutsin/Desktop/Python/advanced_python/Diplom/config.json'
+
 
 class Database:
 
     def __init__(self):
-        self.data = take_config('config.json')
+        self.data = take_config(PATH)
         self.db = pg.connect(**self.data['data'])
 
     def create_db(self):
@@ -56,9 +58,9 @@ class Database:
                 for couple in data_list:
                     curs.execute("insert into user_couple (user_id, couple_vk_id, link, photo_link_1, photo_link_2,"
                                  "photo_link_3) values (%s, %s, %s, %s, %s, %s)", (ids, couple['id'], couple['link'],
-                                                                                    couple['photo']['1'],
-                                                                                    couple['photo']['2'],
-                                                                                    couple['photo']['3']))
+                                                                                   couple['photo']['1'],
+                                                                                   couple['photo']['2'],
+                                                                                   couple['photo']['3']))
 
     def get_couple(self):
         with self.db as conn:
