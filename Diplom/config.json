@@ -1,1 +1,1 @@
-{"id": "", "access_token": "4d5f1a5cc168e3e4a4a21254f7824ffd1ab7fb20b0b85f7fba99ca89b0c3f7edd59e2b8e9d4b63f31991e", "data": {"dbname": "learningdb", "user": "postgres", "password": "13524", "host": "localhost", "port": "5432"}}
+{"id": "", "access_token": "05824b09b2eaf32c505767fa9dde8145f537bb9b80e227a9217ffea15135926420c646d1a4049179a8afe", "data": {"dbname": "postgres", "user": "postgres", "password": "13524", "host": "localhost", "port": "5432"}}

@@ -1,13 +1,13 @@
+# -*- coding: utf-8 -*-
 import psycopg2 as pg
 from app.user import take_config
-
-PATH = '/Users/antongrutsin/Desktop/Python/advanced_python/Diplom/config.json'
+import os
 
 
 class Database:
 
     def __init__(self):
-        self.data = take_config(PATH)
+        self.data = take_config('config.json')
         self.db = pg.connect(**self.data['data'])
 
     def create_db(self):
@@ -69,7 +69,8 @@ class Database:
                 data = curs.fetchall()
         return data
 
-
+if __name__ == '__main__':
+    pass
 
 
 

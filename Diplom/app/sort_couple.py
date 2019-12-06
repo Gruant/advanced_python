@@ -1,11 +1,11 @@
+# -*- coding: utf-8 -*-
 import json
 import os
 import re
 from collections import Counter
 from datetime import datetime
+from app.user import take_config, calculate_age
 
-
-PATH = os.path.abspath('db/weight_criteria.json')
 
 
 class Criteria:
@@ -19,7 +19,7 @@ class Criteria:
         self.user_list = user_list
         self.without_close = []
         self.with_groups = []
-        self.criteria = weight_criteria()
+        self.criteria = take_config('db/weight_criteria.json')
 
     def users_with_common_groups(self):
         user_ids = [i['id'] for i in self.user_list]
@@ -43,7 +43,7 @@ class Criteria:
         for people in self.user_list:
             if people.get('interests'):
                 for item in self.user.interests:
-                    regex = re.compile(f'({item})')
+                    regex = re.compile(f'{item}')
                     match = re.search(regex, people['interests'])
                     if match:
                         people['weight'] += self.criteria['interests']
@@ -67,7 +67,7 @@ class Criteria:
                 age = calculate_age(datetime(year=int(year), month=int(month), day=int(day)))
                 if age == self.user.age:
                     people['weight'] += self.criteria['age']
-            except Exception as e:
+            except Exception:
                 continue
 
     def create_list_with_weight(self):
@@ -79,17 +79,6 @@ class Criteria:
 
     def sort_list(self):
         self.user_list.sort(key=lambda couple: couple['weight'], reverse=True)
-
-
-def weight_criteria():
-    with open(PATH, 'r') as file:
-        weight = json.load(file)
-        return weight
-
-
-def calculate_age(born):
-    today = date.today()
-    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 
 if __name__ == '__main__':

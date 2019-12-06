@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 import vk_api
 from urllib.parse import urlencode
 from datetime import date, datetime
 import re
 import json
 from sys import exit
+import os
+import pathlib
 
 
 class User:
@@ -27,7 +30,7 @@ class User:
                                                                   'city, groups')
             self.id = data[0].get('id')
         except vk_api.exceptions.ApiError as e:
-            print('Неверный токен')
+            print('Неверный токен', e)
             exit()
         except IndexError:
             print('Неверно введен ID')
@@ -166,8 +169,8 @@ class User:
         return search_all
 
 
-def take_config(path):
-    with open(path, 'r') as config:
+def take_config(path_a):
+    with open(path_a, 'r') as config:
         configuration = json.load(config)
         return configuration
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from app.user import User, take_config
 from app.sort_couple import Criteria
 from app.create_data import DataMaker
@@ -11,12 +12,12 @@ from sys import exit
 def main():
     try:
         try:
-            user_id = take_config('config.json')['id'] if take_config('config.json')['id'] else input('Введите id: ')
+            user_id = take_config('../config.json')['id'] if take_config('config.json')['id'] else input('Input id: ')
             user = User(user_id)
             user.create_session()
             user.get_main_user_data()
         except vk_api.exceptions.ApiError:
-            print('Неверный ')
+            print('Неверный токен')
             raise vk_api.exceptions.ApiError
         try:
             db = Database()
@@ -31,8 +32,10 @@ def main():
                     users_ids_in_table += row
                 if str(user.id) not in users_ids_in_table:
                     db.create_user(user.id)
+            writen_users = db.get_couple()
         except pg.Error as e:
-            print('Не удалось подключиться к базе данных', e)
+            print(f'Проблема с базой данных: {e}.\nПроверьте конфигурацию в config.json')
+            exit()
 
         print('==== Получили достаточную информацию о пользователе')
 
@@ -40,7 +43,6 @@ def main():
         print('==== Получили группы пользователя')
 
         couple_list = user.search_all()
-        writen_users = db.get_couple()
         writen_users_in_table = []
         new_couple_list = []
         if writen_users:
@@ -80,6 +82,9 @@ def main():
 
     except KeyboardInterrupt:
         print('Выполнение программы прервано')
+
+if __name__ == '__main__':
+    pass
 
 
 
