@@ -30,7 +30,7 @@ class User:
                                                                   'city, groups')
             self.id = data[0].get('id')
         except vk_api.exceptions.ApiError as e:
-            print('Неверный токен', e)
+            print('Что то пошло не так', e)
             exit()
         except IndexError:
             print('Неверно введен ID')

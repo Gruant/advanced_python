@@ -16,9 +16,9 @@ def main():
             user = User(user_id)
             user.create_session()
             user.get_main_user_data()
-        except vk_api.exceptions.ApiError:
-            print('Неверный токен')
-            raise vk_api.exceptions.ApiError
+        except ValueError:
+            print('Не верно возраст')
+            exit()
         try:
             db = Database()
             if not db.check_tables():
